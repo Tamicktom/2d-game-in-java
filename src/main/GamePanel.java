@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -37,5 +39,25 @@ public class GamePanel extends JPanel implements Runnable {
   @Override
   public void run() {
 
+    while (gameThread != null) {
+      // 1 UPDATE: update information such as player position, enemy position, etc.
+      // 2 DRAW: draw the game
+      update();
+      repaint();
+    }
+  }
+
+  public void update() {
+  }
+
+  public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+
+    Graphics2D g2d = (Graphics2D) g;
+
+    g2d.setColor(Color.white); // white background
+    g2d.fillRect(100, 100, tileSize, tileSize); // draw a rectangle
+
+    g2d.dispose(); // dispose the graphics
   }
 }
