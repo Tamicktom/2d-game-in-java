@@ -22,8 +22,8 @@ public class Player extends Entity {
   }
 
   public void setDefaultValues() {
-    x = 100;
-    y = 100;
+    worldX = 100;
+    worldY = 100;
     speed = 4;
     direction = Direction.DOWN;
   }
@@ -47,16 +47,16 @@ public class Player extends Entity {
     if (keyH.isWalking) {
       if (keyH.upPressed) {
         direction = Direction.UP;
-        y -= speed;
+        worldY -= speed;
       } else if (keyH.downPressed) {
         direction = Direction.DOWN;
-        y += speed;
+        worldY += speed;
       } else if (keyH.leftPressed) {
         direction = Direction.LEFT;
-        x -= speed;
+        worldX -= speed;
       } else if (keyH.rightPressed) {
         direction = Direction.RIGHT;
-        x += speed;
+        worldX += speed;
       }
 
       spriteCounter++;
@@ -109,6 +109,6 @@ public class Player extends Entity {
         break;
     }
 
-    g2d.drawImage(image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
+    g2d.drawImage(image, worldX, worldY, gp.TILE_SIZE, gp.TILE_SIZE, null);
   }
 }
