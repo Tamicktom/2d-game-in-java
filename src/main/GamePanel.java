@@ -3,6 +3,7 @@ package src.main;
 import javax.swing.JPanel;
 
 import src.entity.Player;
+import src.tile.TileManager;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
   Player player = new Player(this, keyH);
+  TileManager tileManager = new TileManager(this);
 
   public GamePanel() {
     // set preferred size
@@ -86,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Graphics2D g2d = (Graphics2D) g;
 
+    tileManager.draw(g2d);
     player.draw(g2d);
 
     g2d.dispose(); // dispose the graphics
