@@ -1,6 +1,5 @@
 package src.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -45,18 +44,31 @@ public class Player extends Entity {
   }
 
   public void update() {
-    if (keyH.upPressed) {
-      direction = Direction.UP;
-      y -= speed;
-    } else if (keyH.downPressed) {
-      direction = Direction.DOWN;
-      y += speed;
-    } else if (keyH.leftPressed) {
-      direction = Direction.LEFT;
-      x -= speed;
-    } else if (keyH.rightPressed) {
-      direction = Direction.RIGHT;
-      x += speed;
+    if (keyH.isWalking) {
+      if (keyH.upPressed) {
+        direction = Direction.UP;
+        y -= speed;
+      } else if (keyH.downPressed) {
+        direction = Direction.DOWN;
+        y += speed;
+      } else if (keyH.leftPressed) {
+        direction = Direction.LEFT;
+        x -= speed;
+      } else if (keyH.rightPressed) {
+        direction = Direction.RIGHT;
+        x += speed;
+      }
+
+      spriteCounter++;
+
+      if (spriteCounter >= 10) {
+        if (spriteNumber == 1) {
+          spriteNumber = 2;
+        } else if (spriteNumber == 2) {
+          spriteNumber = 1;
+        }
+        spriteCounter = 0;
+      }
     }
   }
 
@@ -65,16 +77,32 @@ public class Player extends Entity {
 
     switch (direction) {
       case UP:
-        image = up1;
+        if (spriteNumber == 1) {
+          image = up1;
+        } else if (spriteNumber == 2) {
+          image = up2;
+        }
         break;
       case DOWN:
-        image = down1;
+        if (spriteNumber == 1) {
+          image = down1;
+        } else if (spriteNumber == 2) {
+          image = down2;
+        }
         break;
       case LEFT:
-        image = left1;
+        if (spriteNumber == 1) {
+          image = left1;
+        } else if (spriteNumber == 2) {
+          image = left2;
+        }
         break;
       case RIGHT:
-        image = right1;
+        if (spriteNumber == 1) {
+          image = right1;
+        } else if (spriteNumber == 2) {
+          image = right2;
+        }
         break;
       default:
         image = down1;
