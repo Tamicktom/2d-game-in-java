@@ -21,13 +21,23 @@ public class GamePanel extends JPanel implements Runnable {
   final int screenWidth = tileSize * maxScreenColumns; // 768px
   final int screenHeight = tileSize * maxScreenRows; // 576px
 
+  int FPS = 60; // frames per second
+
+  KeyHandler keyH = new KeyHandler();
   Thread gameThread;
+
+  // Set players default position
+  int playerX = 100;
+  int playerY = 100;
+  int playerSpeed = 4;
 
   public GamePanel() {
     // set preferred size
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
     this.setBackground(Color.black);
     this.setDoubleBuffered(true);
+    this.addKeyListener(keyH);
+    this.setFocusable(true);
   }
 
   public void startGameThread() {
@@ -39,15 +49,37 @@ public class GamePanel extends JPanel implements Runnable {
   @Override
   public void run() {
 
+    double drawInterval = 1_000_000_000 / FPS; // nanoseconds
+    double delta = 0;
+    long lastTime = System.nanoTime();
+    long currentTime;
+
     while (gameThread != null) {
-      // 1 UPDATE: update information such as player position, enemy position, etc.
-      // 2 DRAW: draw the game
-      update();
-      repaint();
+
+      currentTime = System.nanoTime();
+
+      delta += (currentTime - lastTime) / drawInterval;
+
+      lastTime = currentTime;
+
+      if (delta >= 1) {
+        update();
+        repaint();
+        delta--;
+      }
     }
   }
 
   public void update() {
+    if (keyH.upPressed) { // go up
+      playerY -= playerSpeed;
+    } else if (keyH.downPressed) { // go down
+      playerY += playerSpeed;
+    } else if (keyH.leftPressed) { // go left
+      playerX -= playerSpeed;
+    } else if (keyH.rightPressed) { // go right
+      playerX += playerSpeed;
+    }
   }
 
   public void paintComponent(Graphics g) {
@@ -56,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     Graphics2D g2d = (Graphics2D) g;
 
     g2d.setColor(Color.white); // white background
-    g2d.fillRect(100, 100, tileSize, tileSize); // draw a rectangle
+    g2d.fillRect(playerX, playerY, tileSize, tileSize); // draw a rectangle
 
     g2d.dispose(); // dispose the graphics
   }
