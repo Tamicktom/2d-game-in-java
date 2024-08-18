@@ -11,14 +11,16 @@ import src.main.GamePanel;
 
 public class TileManager {
 
+  final int QTD_TILES = 37;
+
   GamePanel gp;
-  Tile[] tile;
+  Tile[] tiles;
   int mapTileNum[][];
 
   public TileManager(GamePanel gp) {
     this.gp = gp;
 
-    tile = new Tile[10];
+    tiles = new Tile[QTD_TILES];
     mapTileNum = new int[gp.MAX_SCREEN_COLUMNS][gp.MAX_SCREEN_ROWS];
 
     getTileImage();
@@ -27,14 +29,16 @@ public class TileManager {
 
   public void getTileImage() {
     try {
-      tile[0] = new Tile();
-      tile[0].image = ImageIO.read(getClass().getResourceAsStream("/assets/tiles/000.png"));
+      for (int i = 0; i < QTD_TILES; i++) {
+        // create tile number with a min of 2 "0" on the left
+        String tileNum = String.format("%03d", i);
+        String tilePath = "/assets/tiles/" + tileNum + ".png";
 
-      tile[1] = new Tile();
-      tile[1].image = ImageIO.read(getClass().getResourceAsStream("/assets/tiles/001.png"));
+        System.out.println(tilePath);
 
-      tile[2] = new Tile();
-      tile[2].image = ImageIO.read(getClass().getResourceAsStream("/assets/tiles/002.png"));
+        tiles[i] = new Tile();
+        tiles[i].image = ImageIO.read(getClass().getResourceAsStream(tilePath));
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -83,7 +87,7 @@ public class TileManager {
 
       int tileNum = mapTileNum[column][row];
 
-      g2d.drawImage(tile[tileNum].image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
+      g2d.drawImage(tiles[tileNum].image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
 
       column++;
       x += gp.TILE_SIZE;
