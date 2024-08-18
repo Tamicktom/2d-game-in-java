@@ -21,7 +21,7 @@ public class TileManager {
     this.gp = gp;
 
     tiles = new Tile[QTD_TILES];
-    mapTileNum = new int[gp.MAX_SCREEN_COLUMNS][gp.MAX_SCREEN_ROWS];
+    mapTileNum = new int[gp.MAX_WORLD_COLUMNS][gp.MAX_WORLD_ROWS];
 
     getTileImage();
     loadMap("/assets/maps/001.txt");
@@ -52,19 +52,26 @@ public class TileManager {
       int column = 0;
       int row = 0;
 
-      while (column < gp.MAX_SCREEN_COLUMNS && row < gp.MAX_SCREEN_ROWS) {
+      while (column < gp.MAX_WORLD_COLUMNS && row < gp.MAX_WORLD_ROWS) {
         String line = br.readLine();
 
-        while (column < gp.MAX_SCREEN_COLUMNS) {
+        while (column < gp.MAX_WORLD_COLUMNS) {
           String numbers[] = line.split("-");
 
-          int num = Integer.parseInt(numbers[column]);
+          // int num = Integer.parseInt(numbers[column]);
+          int num;
+
+          try {
+            num = Integer.parseInt(numbers[column]);
+          } catch (Exception e) {
+            num = 0;
+          }
 
           mapTileNum[column][row] = num;
           column++;
         }
 
-        if (column == gp.MAX_SCREEN_COLUMNS) {
+        if (column == gp.MAX_WORLD_COLUMNS) {
           column = 0;
           row++;
         }
@@ -78,25 +85,25 @@ public class TileManager {
 
   public void draw(Graphics2D g2d) {
 
-    int column = 0;
-    int row = 0;
-    int x = 0;
-    int y = 0;
+    int worldColumn = 0;
+    int worldRow = 0;
 
-    while (column < gp.MAX_SCREEN_COLUMNS && row < gp.MAX_SCREEN_ROWS) {
+    while (worldColumn < gp.MAX_WORLD_COLUMNS && worldRow < gp.MAX_WORLD_ROWS) {
 
-      int tileNum = mapTileNum[column][row];
+      int tileNum = mapTileNum[worldColumn][worldRow];
 
-      g2d.drawImage(tiles[tileNum].image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
+      int worldX = worldColumn * gp.TILE_SIZE;
+      int worldY = worldRow * gp.TILE_SIZE;
+      int screenX = worldX - (this.gp.player.worldX + this.gp.player.worldX);
+      int screenY = worldY - (this.gp.player.worldY + this.gp.player.worldY);
 
-      column++;
-      x += gp.TILE_SIZE;
+      g2d.drawImage(tiles[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
 
-      if (column == gp.MAX_SCREEN_COLUMNS) {
-        column = 0;
-        row++;
-        x = 0;
-        y += gp.TILE_SIZE;
+      worldColumn++;
+
+      if (worldColumn == gp.MAX_WORLD_COLUMNS) {
+        worldColumn = 0;
+        worldRow++;
       }
     }
   }
