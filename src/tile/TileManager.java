@@ -1,5 +1,6 @@
 package src.tile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -94,11 +95,19 @@ public class TileManager {
 
       int worldX = worldColumn * gp.TILE_SIZE;
       int worldY = worldRow * gp.TILE_SIZE;
-      int screenX = worldX - (this.gp.player.worldX + this.gp.player.worldX);
-      int screenY = worldY - (this.gp.player.worldY + this.gp.player.worldY);
+      int screenX = worldX - (gp.player.worldX + gp.player.SCREEN_X);
+      int screenY = worldY - (gp.player.worldY + gp.player.SCREEN_Y);
 
-      g2d.drawImage(tiles[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+      boolean isVisibleOnScreenX = (worldX > (gp.player.worldX - gp.player.SCREEN_X))
+          && (worldX < (gp.player.worldX + gp.player.SCREEN_X));
 
+      boolean isVisibleOnScreenY = (worldY > (gp.player.worldY - gp.player.SCREEN_Y))
+          && (worldY < (gp.player.worldY + gp.player.SCREEN_Y));
+
+      if (isVisibleOnScreenX && isVisibleOnScreenY) {
+        g2d.drawImage(tiles[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+      }
+      
       worldColumn++;
 
       if (worldColumn == gp.MAX_WORLD_COLUMNS) {

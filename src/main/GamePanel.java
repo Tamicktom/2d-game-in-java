@@ -18,8 +18,8 @@ public class GamePanel extends JPanel implements Runnable {
 
   public final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // 48x48 tile
 
-  public final int MAX_SCREEN_COLUMNS = 16; // 16 columns
-  public final int MAX_SCREEN_ROWS = 12; // 12 rows
+  public final int MAX_SCREEN_COLUMNS = 20;
+  public final int MAX_SCREEN_ROWS = 12;
 
   public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMNS; // 768px
   public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROWS; // 576px
@@ -79,6 +79,8 @@ public class GamePanel extends JPanel implements Runnable {
 
       if (timer >= 1_000_000_000) {
         System.out.println("FPS: " + drawCount);
+        System.out.println("Player World  X: " + player.worldX + " Y: " + player.worldY);
+        System.out.println("Player Screen X: " + player.SCREEN_X + " Y: " + player.SCREEN_Y);
         timer = 0;
         drawCount = 0;
       }
