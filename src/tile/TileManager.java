@@ -98,11 +98,14 @@ public class TileManager {
       int screenX = worldX - (gp.player.worldX + gp.player.SCREEN_X);
       int screenY = worldY - (gp.player.worldY + gp.player.SCREEN_Y);
 
-      boolean isVisibleOnScreenX = (worldX > (gp.player.worldX - gp.player.SCREEN_X))
-          && (worldX < (gp.player.worldX + gp.player.SCREEN_X));
+      // boolean isVisibleOnScreenX = (worldX > (gp.player.worldX - gp.player.SCREEN_X))
+      //     && (worldX < (gp.player.worldX + gp.player.SCREEN_X));
 
-      boolean isVisibleOnScreenY = (worldY > (gp.player.worldY - gp.player.SCREEN_Y))
-          && (worldY < (gp.player.worldY + gp.player.SCREEN_Y));
+      // boolean isVisibleOnScreenY = (worldY > (gp.player.worldY - gp.player.SCREEN_Y))
+      //     && (worldY < (gp.player.worldY + gp.player.SCREEN_Y));
+
+      boolean isVisibleOnScreenX = true;
+      boolean isVisibleOnScreenY = true;
 
       if (isVisibleOnScreenX && isVisibleOnScreenY) {
         g2d.drawImage(tiles[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
