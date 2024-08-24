@@ -1,6 +1,5 @@
 package src.tile;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import src.main.GamePanel;
 public class TileManager {
 
   final int QTD_TILES = 37;
+  int[] TILES_WITH_COLLISION = {0};
 
   GamePanel gp;
   Tile[] tiles;
@@ -39,6 +39,13 @@ public class TileManager {
 
         tiles[i] = new Tile();
         tiles[i].image = ImageIO.read(getClass().getResourceAsStream(tilePath));
+
+        // check if tile has collision
+        for (int j = 0; j < TILES_WITH_COLLISION.length; j++) {
+          if (i == TILES_WITH_COLLISION[j]) {
+            tiles[i].collision = true;
+          }
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
