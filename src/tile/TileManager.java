@@ -15,8 +15,8 @@ public class TileManager {
   int[] TILES_WITH_COLLISION = {0};
 
   GamePanel gp;
-  Tile[] tiles;
-  int mapTileNum[][];
+  public Tile[] tiles;
+  public int mapTileNum[][];
 
   public TileManager(GamePanel gp) {
     this.gp = gp;
