@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
   public boolean upPressed, downPressed, leftPressed, rightPressed;
+  public boolean interactPressed;
   public boolean isWalking = false;
 
   @Override
@@ -16,30 +17,34 @@ public class KeyHandler implements KeyListener {
   public void keyPressed(KeyEvent e) {
     int code = e.getKeyCode();
 
-    isWalking = true;
-
     if (code == KeyEvent.VK_W) {
       upPressed = true;
+      isWalking = true;
     }
 
     if (code == KeyEvent.VK_A) {
       leftPressed = true;
+      isWalking = true;
     }
 
     if (code == KeyEvent.VK_S) {
       downPressed = true;
+      isWalking = true;
     }
 
     if (code == KeyEvent.VK_D) {
       rightPressed = true;
+      isWalking = true;
+    }
+
+    if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+      interactPressed = true;
     }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
     int code = e.getKeyCode();
-
-    isWalking = false;
 
     if (code == KeyEvent.VK_W) {
       upPressed = false;
@@ -56,6 +61,12 @@ public class KeyHandler implements KeyListener {
     if (code == KeyEvent.VK_D) {
       rightPressed = false;
     }
+
+    if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+      interactPressed = false;
+    }
+
+    isWalking = upPressed || downPressed || leftPressed || rightPressed;
   }
 
 }
