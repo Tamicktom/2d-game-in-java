@@ -3,6 +3,7 @@ package src.main;
 import javax.swing.JPanel;
 
 import src.entity.Player;
+import src.entity.NPC;
 import src.tile.TileManager;
 
 import src.main.DialogueManager;
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
   public Player player = new Player(this, keyH);
+  public NPC[] npcs = new NPC[10];
   TileManager tileManager = new TileManager(this);
   public CollisionChecker collisionChecker = new CollisionChecker(this);
   public DialogueManager dialogueManager = new DialogueManager(this);
@@ -48,6 +50,12 @@ public class GamePanel extends JPanel implements Runnable {
     this.setDoubleBuffered(true);
     this.addKeyListener(keyH);
     this.setFocusable(true);
+    setupNPCs();
+  }
+
+  private void setupNPCs() {
+    npcs[0] = new NPC(this, TILE_SIZE * 10, TILE_SIZE * 8,
+        new String[]{"Hi! I'm an NPC.", "Nice to meet you."});
   }
 
   public void startGameThread() {
@@ -94,14 +102,46 @@ public class GamePanel extends JPanel implements Runnable {
   public void update() {
     player.update();
     if (keyH.interactPressed) {
-      if (!dialogueManager.isActive()) {
-        String[] lines = {"Hello there!", "Welcome to the game."};
-        dialogueManager.startDialogue(lines);
-      } else {
+      if (dialogueManager.isActive()) {
         dialogueManager.progress();
+      } else {
+        NPC npc = getNPCInFrontOfPlayer();
+        if (npc != null) {
+          dialogueManager.startDialogue(npc.getDialogueLines());
+        }
       }
       keyH.interactPressed = false;
     }
+  }
+
+  private NPC getNPCInFrontOfPlayer() {
+    int checkX = player.worldX;
+    int checkY = player.worldY;
+
+    switch (player.direction) {
+      case UP:
+        checkY -= TILE_SIZE;
+        break;
+      case DOWN:
+        checkY += TILE_SIZE;
+        break;
+      case LEFT:
+        checkX -= TILE_SIZE;
+        break;
+      case RIGHT:
+        checkX += TILE_SIZE;
+        break;
+    }
+
+    java.awt.Rectangle area = new java.awt.Rectangle(checkX, checkY, TILE_SIZE, TILE_SIZE);
+    for (NPC npc : npcs) {
+      if (npc == null) continue;
+      java.awt.Rectangle npcArea = new java.awt.Rectangle(npc.worldX, npc.worldY, TILE_SIZE, TILE_SIZE);
+      if (area.intersects(npcArea)) {
+        return npc;
+      }
+    }
+    return null;
   }
 
   public void paintComponent(Graphics g) {
@@ -110,6 +150,9 @@ public class GamePanel extends JPanel implements Runnable {
     Graphics2D g2d = (Graphics2D) g;
 
     tileManager.draw(g2d);
+    for (NPC npc : npcs) {
+      if (npc != null) npc.draw(g2d);
+    }
     player.draw(g2d);
     dialogueManager.draw(g2d);
 
