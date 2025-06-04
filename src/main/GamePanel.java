@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import src.entity.Player;
 import src.tile.TileManager;
 
+import src.main.DialogueManager;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
   public Player player = new Player(this, keyH);
   TileManager tileManager = new TileManager(this);
   public CollisionChecker collisionChecker = new CollisionChecker(this);
+  public DialogueManager dialogueManager = new DialogueManager(this);
 
   public GamePanel() {
     // set preferred size
@@ -90,6 +93,15 @@ public class GamePanel extends JPanel implements Runnable {
 
   public void update() {
     player.update();
+    if (keyH.interactPressed) {
+      if (!dialogueManager.isActive()) {
+        String[] lines = {"Hello there!", "Welcome to the game."};
+        dialogueManager.startDialogue(lines);
+      } else {
+        dialogueManager.progress();
+      }
+      keyH.interactPressed = false;
+    }
   }
 
   public void paintComponent(Graphics g) {
@@ -99,6 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     tileManager.draw(g2d);
     player.draw(g2d);
+    dialogueManager.draw(g2d);
 
     g2d.dispose(); // dispose the graphics
   }
